@@ -92,7 +92,7 @@ class _WalletDetailsState extends State<WalletDetails> {
                 ),
               ),
               Divider(),
-              Text('Valor total a recibir por la cartera: $valorTotalRecibir'),
+              Text('Valor total a recibir por la cartera: S/. $valorTotalRecibir'),
               // Divider(),
               // Text('TCEA de la cartera: 0%'),
           ],
