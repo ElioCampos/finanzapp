@@ -52,6 +52,15 @@ class _WalletDetailsState extends State<WalletDetails> {
         title: Text('Letras de cartera'),
         backgroundColor: Colors.green[300],
         actions: <Widget>[
+           IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Colors.white,  
+            ),
+            onPressed: () {
+              
+            },
+          ),
           IconButton(
             icon: Icon(
               Icons.add,
@@ -70,9 +79,34 @@ class _WalletDetailsState extends State<WalletDetails> {
   Widget _lettersContent() {
     if (isLoaded) {
       if (letterList.length == 0) {
-        return Container(child:Center(
-          child: Text("Aún no tienes letras en esta cartera.")
-        ));
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+                Container(
+                  height: 120.0,
+                  width: 120.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('lib/images/emptywallet.png'),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                Divider(),
+                Container(
+                  width: 400,
+                  margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: Center(
+                    child: Text("Parece que aún no tienes letras en esta cartera. ¡Puedes añadir una!",
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                ),
+              ],
+            ),
+       );
       }
       else {
        return SingleChildScrollView(
@@ -93,7 +127,7 @@ class _WalletDetailsState extends State<WalletDetails> {
               ),
               Divider(),
               Text('Valor total a recibir por la cartera: S/. $valorTotalRecibir'),
-              // Divider(),
+              // Divider(), 
               // Text('TCEA de la cartera: 0%'),
           ],
         ),
@@ -113,7 +147,7 @@ class _WalletDetailsState extends State<WalletDetails> {
         itemBuilder: (BuildContext context, i){
           return ListTile(
             title: Text("Letra " + letterList[i]['id'].toString()),
-            subtitle: Text("Valor nominal " + letterList[i]['valNom'].toString()),
+            subtitle: Text("Valor nominal: S/. " + letterList[i]['valNom'].toString()),
             leading: CircleAvatar(
               backgroundImage: AssetImage('lib/images/letra.jpg'),
               backgroundColor: Colors.blue,

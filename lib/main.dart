@@ -1,4 +1,4 @@
-import 'package:finanzapp/utils/dbhelper.dart';
+// import 'package:finanzapp/utils/dbhelper.dart';
 import 'package:flutter/material.dart';
 import 'package:finanzapp/router.dart' as router;
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "FinanzApp",
-      initialRoute: 'home',
+      initialRoute: 'login',
       onGenerateRoute: router.generateRoute,
     );
   }

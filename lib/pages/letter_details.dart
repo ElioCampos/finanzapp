@@ -43,9 +43,6 @@ class _LetterDetailsState extends State<LetterDetails> {
         gastosIni = wallet[0]['gastosInic']+.0;
         gastosFin = wallet[0]['gastosFin']+.0;
       });
-      // print("FECHA GIRO: " + letter[0]['fechaGiro'].toString());
-      // var a = DateTime.parse(letter[0]['fechaGiro'].toString());
-      // print(a);
     }
 
   void makeOperation() {
@@ -66,6 +63,17 @@ class _LetterDetailsState extends State<LetterDetails> {
       appBar: AppBar(
         title: Text('Detalles de letra'),
         backgroundColor: Colors.green[300],
+        actions: <Widget>[
+           IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Colors.white,  
+            ),
+            onPressed: () {
+              // Navigator.pushNamed(context, 'add_wallet');
+            },
+          ),
+        ]
       ),
       body: _letterDetails(),
     );
@@ -82,13 +90,13 @@ class _LetterDetailsState extends State<LetterDetails> {
           Divider(),
           Text('Fecha de descuento: ' + wallet[0]['fechaDesc'].toString()),
           Divider(),
-          Text('Valor nominal: $valorNominal'),
+          Text('Valor nominal: S/. $valorNominal'),
           Divider(),
-          Text('Tasa efectiva: $tasaEfec'),
+          Text('Tasa efectiva: $tasaEfec%'),
           Divider(),
-          Text('Gastos iniciales totales: $gastosIni'),
+          Text('Gastos iniciales totales: S/. $gastosIni'),
           Divider(),
-          Text('Gastos finales totales: $gastosFin'),
+          Text('Gastos finales totales: S/. $gastosFin'),
           Divider(),
           TextButton(
             onPressed: (){
@@ -99,52 +107,13 @@ class _LetterDetailsState extends State<LetterDetails> {
             child: Text("Hacer operación")
           ),
           Divider(),
-          Text('Valor total a recibir: $valorRecibir'),
+          Text('Valor total a recibir: S/. $valorRecibir'),
           Divider(),
-          Text('Valor total a entregar: $valorEntregar'),
+          Text('Valor total a entregar: S/. ${-valorEntregar}'),
           Divider(),
           Text('TCEA: $tcea%'),
         ],
       ),
     );
   }
-
-  
 }
-
-
-// DateTime selectedDate = DateTime.now();
-
-//   Future<void> _selectDate(BuildContext context) async {
-//     final DateTime picked = await showDatePicker(
-//         context: context,
-//         initialDate: selectedDate,
-//         firstDate: DateTime(2015, 8),
-//         lastDate: DateTime(2101));
-//     if (picked != null && picked != selectedDate)
-//       setState(() {
-//         selectedDate = picked;
-//       });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: <Widget>[
-//             Text("${selectedDate.toLocal()}".split(' ')[0]),
-//             SizedBox(height: 20.0,),
-//             RaisedButton(
-//               onPressed: () => _selectDate(context),
-//               child: Text('Select date'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }

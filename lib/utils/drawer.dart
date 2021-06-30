@@ -20,7 +20,7 @@ class MyDrawer extends StatelessWidget {
                 color: Colors.green[300],
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage('lib/images/reading.jpg'))),
+                    image: AssetImage('lib/images/finance.jpg'))),
           ),
           ListTile(
             leading: Icon(Icons.home),
@@ -38,46 +38,14 @@ class MyDrawer extends StatelessWidget {
               Navigator.pushNamed(context, 'wallets')
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.bookmark),
-          //   title: Text('Marcadores'),
-          //   onTap: () => {
-          //     Navigator.of(context).pop(),
-          //     Navigator.pushNamed(context, 'bookmarks', arguments: userId)
-          //   },
-          // ),
-          // ListTile(
-          //   leading: Icon(Icons.search),
-          //   title: Text('Hashtags'),
-          //   onTap: () => {
-          //     Navigator.of(context).pop(),
-          //     Navigator.pushNamed(context, 'hashtags', arguments: userId)
-          //   },
-          // ),
-          // ListTile(
-          //   leading: Icon(Icons.notifications),
-          //   title: Text('Notificaciones'),
-          //   onTap: () => {
-          //     Navigator.of(context).pop(),
-          //     Navigator.pushNamed(context, 'notifications', arguments: userId)
-          //   },
-          // ),
-          // ListTile(
-          //   leading: Icon(Icons.person),
-          //   title: Text('Perfil'),
-          //   onTap: () => {
-          //     Navigator.of(context).pop(),
-          //     Navigator.pushNamed(context, 'profile', arguments: userId)
-          //   },
-          // ),
-          // ListTile(
-          //   leading: Icon(Icons.settings),
-          //   title: Text('Configuración'),
-          //   onTap: () => {
-          //     Navigator.of(context).pop(),
-          //     Navigator.pushNamed(context, 'settings', arguments: userId)
-          //   },
-          // ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Opciones'),
+            onTap: () => {
+              Navigator.pop(context),
+              Navigator.pushNamed(context, 'options')
+            },
+          ),
         ],
       ),
     );

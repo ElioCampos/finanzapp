@@ -1,4 +1,5 @@
 // import 'dart:convert';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 // import 'package:easystory/src/endpoints/endpoints.dart';
 // import 'package:http/http.dart' as http;
@@ -10,7 +11,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // String url = "https://easystory-backend.herokuapp.com/api/";
   TextEditingController userText = new TextEditingController();
   TextEditingController passText = new TextEditingController();
   List dataUsers = [];
@@ -18,21 +18,9 @@ class _LoginPageState extends State<LoginPage> {
   bool userValid = true;
   bool passValid = true;
   
-  // Future<String> getUser() async {
-  //   var response = await http.get(Uri.parse(url + "users"), headers: headers());
-
-  //   setState(() {
-  //     var extractdata = json.decode(response.body);
-  //     dataUsers = extractdata['content'];
-  //   });
-  //   print(dataUsers);
-  //   return response.body.toString();
-  // }
-
   @override
   void initState() {
     super.initState();
-    // getUser();
   }
 
   @override
@@ -53,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: EdgeInsets.only(top: 210, left:40, right:40, bottom:40),
             children: <Widget>[
               Image.asset(
-                'lib/images/libro2.png',
+                'lib/images/piggy.png',
                 height: 100,
                 width: 100,
               ),
@@ -82,8 +70,8 @@ class _LoginPageState extends State<LoginPage> {
                         controller: passText,
                         decoration: InputDecoration(
                           labelText: "Ingresa contraseña",
-                          errorText:
-                              passValid ? null : 'Ingrese una contraseña',
+                          // errorText:
+                          //     passValid ? 'La contraseña es incorrecta' : 'Ingrese una contraseña',
                         ),
                         keyboardType: TextInputType.text,
                         obscureText: true,
@@ -93,9 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               )),
               Center(
-                
                 child: ElevatedButton(
-                  
                   onPressed: () {
                     // for (var cosa in dataUsers) {
                     //   if (cosa['username'] == userText.text) {
@@ -103,12 +89,12 @@ class _LoginPageState extends State<LoginPage> {
                     //     userId = cosa['id'];
                     //   }
                     // }
-                    // setState(() {
+                    setState(() {
                     //   userExists ? userValid = true : userValid = false;
-                    //   passText.text.isNotEmpty
-                    //       ? passValid = true
-                    //       : passValid = false;
-                    // });
+                      // passText.text.isNotEmpty
+                      //     ? passValid = true
+                      //     : passValid = false;
+                    });
                     // if (userValid && passValid) {
                       Navigator.pushNamed(context, 'home');
                     // }
@@ -119,23 +105,22 @@ class _LoginPageState extends State<LoginPage> {
                     shape: MaterialStateProperty.all(new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(10.0),
                           )),
-                    
                   ),
                   child: const Text('Iniciar sesión'),
                 ),
               ),
-              // Divider(),
-              // Center(
-              //   child: RichText(
-              //     text: TextSpan(
-              //       text: '¿No tienes una cuenta? ¡Regístrate!',
-              //       recognizer: TapGestureRecognizer()
-              //         ..onTap = () {
-              //           Navigator.pushNamed(context, 'register');
-              //         },
-              //     ),
-              //   ),
-              // )
+              Divider(),
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: '¿No tienes una cuenta? ¡Regístrate!',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.pushNamed(context, 'register');
+                      },
+                  ),
+                ),
+              )
             ],
           ),
         ],

@@ -20,8 +20,6 @@ class _AddWalletState extends State<AddWallet> {
   double gastosFin = 0.0;
   var fechaDesc;
 
-  // FocusNode focus = new FocusNode();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +44,7 @@ class _AddWalletState extends State<AddWallet> {
                 labelText: 'Introduzca la tasa efectiva anual compensatoria',
                 // labelStyle: TextStyle(color: Colors.green),
                 hintText: 'TEA compensatoria',
+                // errorText: 'Solo se admiten números',
                 // errorText: isValid ? null : 'La publicación no puede estar vacía',
               ),
               keyboardType: TextInputType.number,
@@ -65,6 +64,7 @@ class _AddWalletState extends State<AddWallet> {
                 labelText: 'Introduzca gastos iniciales totales',
                 // labelStyle: TextStyle(color: Colors.green),
                 hintText: 'Gastos iniciales',
+                // errorText: 'Solo se admiten números',
                 // errorText: isValid ? null : 'La publicación no puede estar vacía',
               ),
               keyboardType: TextInputType.number,
@@ -84,6 +84,7 @@ class _AddWalletState extends State<AddWallet> {
                 labelText: 'Introduzca gastos finales totales',
                 // labelStyle: TextStyle(color: Colors.green),
                 hintText: 'Gastos finales',
+                // errorText: 'Solo se admiten números',
                 // errorText: isValid ? null : 'La publicación no puede estar vacía',
               ),
               keyboardType: TextInputType.number,

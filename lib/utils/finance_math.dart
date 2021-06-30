@@ -29,8 +29,3 @@ List letterOperation(DateTime fechaVenc, DateTime fechaDesc, double tea, double 
   print("TCEA: $tcea");
   return [tcea * 100, valorRecibir, flujo];
 }
-
-List walletOperation(List valoresRecibir) {
-
-  return [];
-}

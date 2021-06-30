@@ -1,3 +1,4 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -16,12 +17,20 @@ class DbHelper {
     if (db == null) {
       db = await openDatabase(join(await getDatabasesPath(), 'finanzapp.db'),
           onCreate: (database, version) {
+        database.execute('CREATE TABLE users('
+            'id INTEGER PRIMARY KEY,'
+            'username TEXT,'
+            'password TEXT,'
+            'email TEXT,'
+            'fullName TEXT)');
         database.execute('CREATE TABLE wallets('
             'id INTEGER PRIMARY KEY,'
+            'userId INTEGER,'
             'tasaEfec DECIMAL,'
             'fechaDesc TEXT,'
             'gastosInic DECIMAL,'
-            'gastosFin DECIMAL)');
+            'gastosFin DECIMAL,' +
+            'FOREIGN KEY(userId) REFERENCES users(id))');
         database.execute('CREATE TABLE letters('
                 'id INTEGER PRIMARY KEY,'
                 'walletId INTEGER,'
@@ -53,12 +62,11 @@ class DbHelper {
 
   Future insertWallet(double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
     List wallets = await db!.rawQuery('select * from wallets');
-    var lastWallet = wallets.last;
-    int lastId = lastWallet['id'];
-    // String dateString ="${fechaDesc.year.toString()}-${fechaDesc.month.toString().padLeft(2,'0')}-${fechaDesc.day.toString().padLeft(2,'0')}";
-    // print(dateString);
-
-    print('INSERT INTO wallets VALUES (${lastId+1}, $tasa, "$fechaDesc", $gastosIni, $gastosFin)');
+    int lastId = 0;
+    if (wallets.length > 0) {
+      var lastWallet = wallets.last;
+      lastId = lastWallet['id'];
+    }
     await db!.execute('INSERT INTO wallets VALUES (${lastId+1}, $tasa, "$fechaDesc", $gastosIni, $gastosFin)');
     print("Agregada nueva cartera");
   }

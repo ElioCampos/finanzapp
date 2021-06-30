@@ -91,6 +91,7 @@ class _AddLetterState extends State<AddLetter> {
                 // labelStyle: TextStyle(color: Colors.green),
                 // hintText: 'Gastos finales',
                 // errorText: isValid ? null : 'La publicación no puede estar vacía',
+                // errorText: 'La fecha de giro es mayor a la de vencimiento.',
                 suffixIcon: IconButton(
                   color: Colors.green,
                   onPressed: () => _selectDate(context, 'giro'),
@@ -117,6 +118,7 @@ class _AddLetterState extends State<AddLetter> {
                 // labelStyle: TextStyle(color: Colors.green),
                 // hintText: 'Gastos finales',
                 // errorText: isValid ? null : 'La publicación no puede estar vacía',
+                // errorText: 'La fecha de vencimiento es menor a la de descuento.',
                 suffixIcon: IconButton(
                   color: Colors.green,
                   onPressed: () => _selectDate(context, 'venc'),

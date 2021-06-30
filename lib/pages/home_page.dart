@@ -1,5 +1,6 @@
 import 'package:finanzapp/utils/dbhelper.dart';
 import 'package:finanzapp/utils/drawer.dart';
+import 'package:finanzapp/utils/stylish.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
           )
         ),
         Center(
-          child: _stylish('¡Bienvenido a FinanzApp!', 30, 3)
+          child: stylish('¡Bienvenido a FinanzApp!', 30, 3)
         ),
         Divider(),
         _options()
@@ -55,10 +56,6 @@ class _HomePageState extends State<HomePage> {
           Card(
             elevation: 1.0,
             margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-            // margin: EdgeInsets.only(
-            //     bottom: 2.0, top: 14.0, left: 15.0, right: 15.0),
-            // elevation: 5,
-            // margin: EdgeInsets.all(10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -69,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   width: 100,
                   margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: Center(child: _stylish('Agregar cartera', 20, 2),)
+                  child: Center(child: stylish('Agregar cartera', 20, 2),)
                 ),
                 Center(
                   child: IconButton(
@@ -85,13 +82,7 @@ class _HomePageState extends State<HomePage> {
           Card(
             elevation: 1.0,
             margin: EdgeInsets.fromLTRB(20, 20, 20, 0),
-            // margin: EdgeInsets.only(
-            //     bottom: 2.0, top: 14.0, left: 15.0, right: 15.0),
             shape: RoundedRectangleBorder(
-              // side: BorderSide(
-              //   color: Colors.grey.shade400,
-              //   width: 2.0,
-              // ),
               borderRadius: BorderRadius.circular(10),
             ),
             semanticContainer: true,
@@ -101,8 +92,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   width: 100,
                   margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  // child: Center(child: Text("Visualizar carteras", textAlign: TextAlign.center)),
-                  child: Center(child: _stylish('Visualizar carteras', 20, 2),)
+                  child: Center(child: stylish('Visualizar carteras', 20, 2),)
                 ),
                 Center(
                   child: IconButton(
@@ -122,29 +112,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _stylish(String stylish, double size, double stroke) {
-    return Stack(
-      children: <Widget>[
-        Text(
-          stylish,
-          style: TextStyle(
-            fontSize: size,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = stroke
-              ..color = Colors.black,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        Text(
-          stylish,
-          style: TextStyle(
-            fontSize: size,
-            color: Colors.green[300],
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
+  
 }

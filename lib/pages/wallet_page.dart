@@ -32,48 +32,67 @@ class _WalletPageState extends State<WalletPage> {
               color: Colors.white,  
             ),
             onPressed: () {
-              // setState(() {
-                
-              // });
               Navigator.pushNamed(context, 'add_wallet');
             },
           )
         ],
       ),
       drawer: MyDrawer(),
-      body: SingleChildScrollView(
-        physics: ScrollPhysics(),
-        child: Column(
-          children: <Widget>[
-             _wallets(),
-          ],
-        ),
-      ),
+      body: _wallets(),
     );
   }
 
   Widget _wallets() {
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: (walletList != null)? walletList.length : 0,
-      itemBuilder: (BuildContext context, i){
-        return ListTile(
-          title: Text("Cartera " + walletList[i]['id'].toString()),
-          subtitle: Text("Fecha descuento: " + walletList[i]['fechaDesc'].toString()),
-          leading: CircleAvatar(
-            backgroundImage: AssetImage('lib/images/wallet.jpg'),
-            backgroundColor: Colors.blue,
+    if (walletList.length == 0) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+              Container(
+                height: 120.0,
+                width: 120.0,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('lib/images/piggycry.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              Text("Parece que aún no tienes carteras. ¡Puedes añadir una!"),
+            ],
           ),
-          onTap: (){
-            // Navigator.pop(context),
-            Navigator.pushNamed(context, 'wallet_details', arguments: walletList[i]['id']);
-          },
-        );
-      },
-    );
+      );
+    }
+    else {
+      return SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Column(
+          children: <Widget>[
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: (walletList != null)? walletList.length : 0,
+              itemBuilder: (BuildContext context, i){
+                return ListTile(
+                  title: Text("Cartera " + walletList[i]['id'].toString()),
+                  subtitle: Text("Fecha descuento: " + walletList[i]['fechaDesc'].toString()),
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage('lib/images/wallet.jpg'),
+                    backgroundColor: Colors.blue,
+                  ),
+                  onTap: (){
+                    // Navigator.pop(context),
+                    Navigator.pushNamed(context, 'wallet_details', arguments: walletList[i]['id']);
+                  },
+                );
+              },
+            )
+          ]
+        )
+      );
+    }
   }
-
   Future showData() async {
     await helper.openDb();
     walletList = await helper.getWallets();
