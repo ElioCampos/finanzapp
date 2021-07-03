@@ -26,6 +26,7 @@ class DbHelper {
         database.execute('CREATE TABLE wallets('
             'id INTEGER PRIMARY KEY,'
             'userId INTEGER,'
+            'tipoMoneda INTEGER,'
             'tasaEfec DECIMAL,'
             'fechaDesc TEXT,'
             'gastosInic DECIMAL,'
@@ -46,33 +47,64 @@ class DbHelper {
 
   Future testDB() async {
     db = await openDb();
-
-    await db!.execute('INSERT INTO wallets VALUES (1, 14.8, "2021-05-04", 11.7, 17.0)');
-    await db!.execute('INSERT INTO letters VALUES (1, 1, "2021-04-11", "2021-07-10", 8538.0, 0)');
-    await db!.execute('INSERT INTO letters VALUES (2, 1, "2021-04-15", "2021-06-14", 9865.0, 0)');
+    // await db!.execute('INSERT INTO users VALUES (1, "admin", "secret", "email@gmail.com", "Juan Rosales")');
+    // await db!.execute('INSERT INTO wallets VALUES (1, 1, 14.8, "2021-05-04", 11.7, 17.0)');
+    // await db!.execute('INSERT INTO letters VALUES (1, 1, "2021-04-11", "2021-07-10", 8538.0, 0)');
+    // await db!.execute('INSERT INTO letters VALUES (2, 1, "2021-04-15", "2021-06-14", 9865.0, 0)');
 
     List wallets = await db!.rawQuery('select * from wallets');
     List letters = await db!.rawQuery('select * from letters');
+    List users = await db!.rawQuery('select * from users');
 
     print("Wallets:");
     print(wallets);
     print("Letters:");
     print(letters);
+    print("Users:");
+    print(users);
+  }
+  Future registerUser(String username, String password, String email, String fullName) async {
+    List users = await db!.rawQuery('select * from users');
+    int lastId = 0;
+    if (users.length > 0) {
+      var lastUser = users.last;
+      lastId = lastUser['id'];
+    }
+    await db!.execute('INSERT INTO users VALUES (${lastId+1}, "$username", "$password", "$email", "$fullName")');
+    // print('INSERT INTO users VALUES ($lastId, "$username", "$password", "$email", "$fullName")');
+    print('Registrado exitosamente');
   }
 
-  Future insertWallet(double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
+  Future getAllUsers() async {
+    List users = await db!.rawQuery('select * from users');
+    print(users);
+    return users;
+  }
+
+  Future insertWallet(int userId, double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
     List wallets = await db!.rawQuery('select * from wallets');
     int lastId = 0;
     if (wallets.length > 0) {
       var lastWallet = wallets.last;
       lastId = lastWallet['id'];
     }
-    await db!.execute('INSERT INTO wallets VALUES (${lastId+1}, $tasa, "$fechaDesc", $gastosIni, $gastosFin)');
+    await db!.execute('INSERT INTO wallets VALUES (${lastId+1}, $userId, $tasa, "$fechaDesc", $gastosIni, $gastosFin)');
     print("Agregada nueva cartera");
   }
+  
+  Future updateWallet(int walletId, double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
+    // List wallets = await db!.rawQuery('select * from wallets');
+    await db!.execute('UPDATE wallets SET tasaEfec=$tasa, fechaDesc="$fechaDesc", gastosInic=$gastosIni, gastosFin=$gastosFin WHERE id=$walletId');
+  }
 
-  Future<List<dynamic>> getWallets() async {
-    List wallets = await db!.rawQuery('select * from wallets');
+  Future deleteWallet(int walletId) async {
+    await db!.execute('delete from wallets where id=$walletId');
+    await db!.execute('delete from letters where walletId=$walletId');
+    print("Eliminada cartera con id $walletId");
+  }
+
+  Future<List<dynamic>> getWallets(int userId) async {
+    List wallets = await db!.rawQuery('select * from wallets where userId=$userId');
     print(wallets);
     return wallets;
   }
@@ -108,4 +140,13 @@ class DbHelper {
     return letters;
   }
 
+  Future updateLetter(int letterId, String fechaGiro, String fechaVenc, double valNom, double retencion) async {
+    // List wallets = await db!.rawQuery('select * from wallets');
+    await db!.execute('UPDATE letters SET fechaGiro="$fechaGiro", fechaVenc="$fechaVenc", valNom=$valNom, retencion=$retencion WHERE id=$letterId');
+  }
+
+  Future deleteLetter(int letterId) async {
+    await db!.execute('delete from letters where id=$letterId');
+    print("Eliminada letra con id $letterId");
+  }
 }

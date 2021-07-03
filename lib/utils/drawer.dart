@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 
 
 class MyDrawer extends StatelessWidget {
-  // final Object argument;
-  // const MyDrawer({ Key? key, required this.argument }) : super(key: key);
+  final int userId;
+  const MyDrawer({ Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // var userId = argument;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -27,7 +26,7 @@ class MyDrawer extends StatelessWidget {
             title: Text('Inicio'),
             onTap: () => {
               Navigator.pop(context),
-              Navigator.pushNamed(context, 'home')
+              Navigator.pushNamed(context, 'home', arguments: userId)
             },
           ),
           ListTile(
@@ -35,7 +34,7 @@ class MyDrawer extends StatelessWidget {
             title: Text('Carteras'),
             onTap: () => {
               Navigator.pop(context),
-              Navigator.pushNamed(context, 'wallets')
+              Navigator.pushNamed(context, 'wallets', arguments: userId)
             },
           ),
           ListTile(
@@ -43,7 +42,15 @@ class MyDrawer extends StatelessWidget {
             title: Text('Opciones'),
             onTap: () => {
               Navigator.pop(context),
-              Navigator.pushNamed(context, 'options')
+              Navigator.pushNamed(context, 'options', arguments: userId)
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Cerrar sesión'),
+            onTap: () => {
+              Navigator.pop(context),
+              Navigator.pushNamed(context, 'login')
             },
           ),
         ],

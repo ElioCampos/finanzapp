@@ -1,9 +1,7 @@
-// import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-// import 'package:easystory/src/endpoints/endpoints.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:flutter/gestures.dart';
+import 'package:finanzapp/utils/dbhelper.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,21 +9,36 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  DbHelper helper = DbHelper();
   TextEditingController userText = new TextEditingController();
   TextEditingController passText = new TextEditingController();
   List dataUsers = [];
+  bool isPressed = false;
   bool userExists = false;
-  bool userValid = true;
-  bool passValid = true;
-  
+  bool passExists = false;
+  bool userValid = false;
+  bool passValid = false;
+  int userId = 0;
+  String userPassword = '';
+  bool usersLoaded = false;
+
+  Future getData() async {
+    await helper.openDb();
+    dataUsers = await helper.getAllUsers();
+    setState(() {
+      dataUsers = dataUsers;
+    });
+    usersLoaded = true;
+  }
+
   @override
   void initState() {
     super.initState();
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    // var userId;
     return Scaffold(
       backgroundColor: Colors.blue[800],
       body: Stack(
@@ -38,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             colorBlendMode: BlendMode.darken,
           ),
           ListView(
-            padding: EdgeInsets.only(top: 210, left:40, right:40, bottom:40),
+            padding: EdgeInsets.only(top: 210, left: 40, right: 40, bottom: 40),
             children: <Widget>[
               Image.asset(
                 'lib/images/piggy.png',
@@ -54,25 +67,22 @@ class _LoginPageState extends State<LoginPage> {
                         labelStyle:
                             TextStyle(color: Colors.white, fontSize: 20))),
                 child: Container(
-                  padding: EdgeInsets.only(bottom:40.0, top:20.0),
+                  padding: EdgeInsets.only(bottom: 40.0, top: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       TextFormField(
                         controller: userText,
                         decoration: InputDecoration(
-                          labelText: "Ingresa usuario",
-                          errorText: userValid ? null : 'El usuario no existe',
-                        ),
+                            labelText: "Ingresa usuario",
+                            errorText: _errorUser(userText.text)),
                         keyboardType: TextInputType.emailAddress,
                       ),
                       TextFormField(
                         controller: passText,
                         decoration: InputDecoration(
-                          labelText: "Ingresa contraseña",
-                          // errorText:
-                          //     passValid ? 'La contraseña es incorrecta' : 'Ingrese una contraseña',
-                        ),
+                            labelText: "Ingresa contraseña",
+                            errorText: _errorPassword(passText.text)),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                       ),
@@ -83,28 +93,24 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    // for (var cosa in dataUsers) {
-                    //   if (cosa['username'] == userText.text) {
-                    //     userExists = true;
-                    //     userId = cosa['id'];
-                    //   }
-                    // }
+                    
                     setState(() {
-                    //   userExists ? userValid = true : userValid = false;
-                      // passText.text.isNotEmpty
-                      //     ? passValid = true
-                      //     : passValid = false;
+                      userValid = false;
+                      passValid = false;
+                      isPressed = true;
+                      _validateData();
                     });
-                    // if (userValid && passValid) {
-                      Navigator.pushNamed(context, 'home');
-                    // }
+                    if (userValid && passValid) {
+                      Navigator.pushNamed(context, 'home', arguments: userId);
+                    }
                   },
-                  style: ButtonStyle(                                 
+                  style: ButtonStyle(
                     minimumSize: MaterialStateProperty.all(Size(400, 50)),
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical:10,horizontal:10)), 
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 10)),
                     shape: MaterialStateProperty.all(new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          )),
+                      borderRadius: new BorderRadius.circular(10.0),
+                    )),
                   ),
                   child: const Text('Iniciar sesión'),
                 ),
@@ -126,5 +132,50 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void _validateData() {
+    userExists = false;
+    passExists = false;
+    for (var user in dataUsers) {
+      if (user['username'] == userText.text) {
+        userExists = true;
+        userId = user['id'];
+        userPassword = user['password'];
+      }
+      if (user['password'] == passText.text) {
+        passExists = true;
+      }
+    }
+    if (userExists){
+      userValid = true;
+      if (passText.text == userPassword){
+        passValid = true;
+      }
+    }
+  }
+
+  String? _errorPassword(String passwordText) {
+    if (isPressed) {
+      if (userExists) {
+        if (passwordText == '') {
+          return "Introduzca una contraseña";
+        } else {
+          if (userPassword != passwordText) {
+            return "La contraseña es incorrecta";
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  String? _errorUser(String usernameText) {
+    if (isPressed) {
+      if (!userExists) {
+        return "El usuario no existe";
+      }
+    }
+    return null;
   }
 }

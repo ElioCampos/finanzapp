@@ -1,3 +1,4 @@
+import 'package:finanzapp/utils/dbhelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
@@ -7,6 +8,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  DbHelper helper = DbHelper();
   TextEditingController userText = new TextEditingController();
   TextEditingController passText = new TextEditingController();
   TextEditingController fullNameText = new TextEditingController();
@@ -34,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
             colorBlendMode: BlendMode.darken,
           ),
           ListView(
-            padding: EdgeInsets.only(top: 50, left:40, right:40, bottom:40),
+            padding: EdgeInsets.only(top: 50, left: 40, right: 40, bottom: 40),
             children: <Widget>[
               Image.asset(
                 'lib/images/piggy.png',
@@ -50,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         labelStyle:
                             TextStyle(color: Colors.white, fontSize: 20))),
                 child: Container(
-                  padding: EdgeInsets.only(bottom:40.0),
+                  padding: EdgeInsets.only(bottom: 40.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -66,7 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: fullNameText,
                         decoration: InputDecoration(
                           labelText: "Nombre completo",
-                          errorText: fullNameValid ? null : 'Ingrese su nombre completo',
+                          errorText: fullNameValid
+                              ? null
+                              : 'Ingrese su nombre completo',
                         ),
                         keyboardType: TextInputType.text,
                       ),
@@ -146,16 +150,18 @@ class _RegisterPageState extends State<RegisterPage> {
                         fullNameValid &&
                         emailValid &&
                         repeatPassValid) {
+                      await helper.registerUser(userText.text, passText.text, emailText.text, fullNameText.text);
+                      Navigator.pop(context);
                       Navigator.pushNamed(context, 'login');
                     }
                   },
-                  style: ButtonStyle(                                 
+                  style: ButtonStyle(
                     minimumSize: MaterialStateProperty.all(Size(500, 50)),
-                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical:10,horizontal:10)), 
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 10)),
                     shape: MaterialStateProperty.all(new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                          )),
-                    
+                      borderRadius: new BorderRadius.circular(10.0),
+                    )),
                   ),
                   child: const Text('Registrar'),
                 ),

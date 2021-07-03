@@ -1,24 +1,25 @@
-// import 'package:finanzapp/models/wallets.dart';
+import 'package:finanzapp/pages/add_wallet.dart';
 import 'package:finanzapp/utils/dbhelper.dart';
 import 'package:finanzapp/utils/drawer.dart';
+import 'package:finanzapp/utils/finance_math.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
 
 class WalletPage extends StatefulWidget {
+  final int userId;
+  const WalletPage({Key? key, required this.userId}) : super(key: key);
   @override
   _WalletPageState createState() => _WalletPageState();
 }
 
 class _WalletPageState extends State<WalletPage> {
-  
   DbHelper helper = DbHelper();
-  var walletList;  
+  var walletList;
   @override
   void initState() {
     super.initState();
     showData();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,15 +30,16 @@ class _WalletPageState extends State<WalletPage> {
           IconButton(
             icon: Icon(
               Icons.add,
-              color: Colors.white,  
+              color: Colors.white,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, 'add_wallet');
+               Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddWallet(userId: widget.userId, isEditing: false, walletId: 0,)));
             },
           )
         ],
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(userId: widget.userId,),
       body: _wallets(),
     );
   }
@@ -49,22 +51,21 @@ class _WalletPageState extends State<WalletPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-              Container(
-                height: 120.0,
-                width: 120.0,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('lib/images/piggycry.png'),
-                    fit: BoxFit.fill,
-                  ),
+            Container(
+              height: 120.0,
+              width: 120.0,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/images/piggycry.png'),
+                  fit: BoxFit.fill,
                 ),
               ),
-              Text("Parece que aún no tienes carteras. ¡Puedes añadir una!"),
-            ],
-          ),
+            ),
+            Text("Parece que aún no tienes carteras. ¡Puedes añadir una!"),
+          ],
+        ),
       );
-    }
-    else {
+    } else {
       return SingleChildScrollView(
         physics: ScrollPhysics(),
         child: Column(
@@ -72,30 +73,33 @@ class _WalletPageState extends State<WalletPage> {
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: (walletList != null)? walletList.length : 0,
-              itemBuilder: (BuildContext context, i){
+              itemCount: (walletList != null) ? walletList.length : 0,
+              itemBuilder: (BuildContext context, i) {
                 return ListTile(
                   title: Text("Cartera " + walletList[i]['id'].toString()),
-                  subtitle: Text("Fecha descuento: " + walletList[i]['fechaDesc'].toString()),
+                  subtitle: Text("Fecha descuento: " +
+                      readDatefromString(walletList[i]['fechaDesc'].toString())),
                   leading: CircleAvatar(
                     backgroundImage: AssetImage('lib/images/wallet.jpg'),
                     backgroundColor: Colors.blue,
                   ),
-                  onTap: (){
-                    // Navigator.pop(context),
-                    Navigator.pushNamed(context, 'wallet_details', arguments: walletList[i]['id']);
+                  onTap: () {
+                    Navigator.pushNamed(context, 'wallet_details',
+                        arguments: walletList[i]['id']);
+                   
                   },
                 );
               },
             )
-          ]
-        )
+          ],
+        ),
       );
     }
   }
+
   Future showData() async {
     await helper.openDb();
-    walletList = await helper.getWallets();
+    walletList = await helper.getWallets(widget.userId);
     setState(() {
       walletList = walletList;
     });
