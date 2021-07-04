@@ -60,7 +60,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: emailText,
                         decoration: InputDecoration(
                           labelText: "Correo",
-                          errorText: emailValid ? null : 'Ingrese su correo',
+                          errorText:
+                              emailValid ? null : 'No es un correo válido',
                         ),
                         keyboardType: TextInputType.emailAddress,
                       ),
@@ -137,9 +138,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       fullNameText.text.isNotEmpty
                           ? fullNameValid = true
                           : fullNameValid = false;
-                      emailText.text.isNotEmpty
-                          ? emailValid = true
-                          : emailValid = false;
+                      if (emailText.text.isNotEmpty) {
+                        if (emailText.text.contains('@')) {
+                          if (emailText.text.contains('.com')) {
+                            emailValid = true;
+                          } else {
+                            emailValid = false;
+                          }
+                        } else {
+                          emailValid = false;
+                        }
+                      } else {
+                        emailValid = false;
+                      }
+                      // emailText.text.isNotEmpty
+                      //     ? emailValid = true
+                      //     : emailValid = false;
                       repeatPassText.text == passText.text
                           ? repeatPassValid = true
                           : repeatPassValid = false;
@@ -150,7 +164,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         fullNameValid &&
                         emailValid &&
                         repeatPassValid) {
-                      await helper.registerUser(userText.text, passText.text, emailText.text, fullNameText.text);
+                      await helper.registerUser(userText.text, passText.text,
+                          emailText.text, fullNameText.text);
                       Navigator.pop(context);
                       Navigator.pushNamed(context, 'login');
                     }

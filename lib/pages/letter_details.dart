@@ -19,6 +19,7 @@ class _LetterDetailsState extends State<LetterDetails> {
   var fechaGiro = DateTime.now();
   var fechaVenc = DateTime.now();
   var fechaDesc = DateTime.now();
+  var numDias = 0;
   var valorNominal = 0.0;
   var tasaEfec = 0.0;
   var gastosIni = 0.0;
@@ -27,6 +28,8 @@ class _LetterDetailsState extends State<LetterDetails> {
   var tcea = 0.0;
   var valorRecibir = 0.0;
   var valorEntregar = 0.0;
+  var retencion = 0.0;
+  String tipoMoneda = '';
 
   Future getData() async {
     await helper.openDb();
@@ -42,15 +45,24 @@ class _LetterDetailsState extends State<LetterDetails> {
       tasaEfec = wallet[0]['tasaEfec'] + .0;
       gastosIni = wallet[0]['gastosInic'] + .0;
       gastosFin = wallet[0]['gastosFin'] + .0;
+      retencion = letter[0]['retencion'] + .0;
+      if (wallet[0]['tipoMoneda'] == 0) {
+        tipoMoneda = "S/.";
+      } else {
+        tipoMoneda = "\$";
+      }
     });
   }
 
   void makeOperation() {
     data = letterOperation(
-        fechaVenc, fechaDesc, tasaEfec, valorNominal, gastosIni, gastosFin);
-    tcea = roundDouble(data[0], 5);
-    valorRecibir = roundDouble(data[1], 2);
-    valorEntregar = roundDouble(data[2], 2);
+        fechaVenc, fechaDesc, tasaEfec, valorNominal, gastosIni, gastosFin, retencion);
+    print("OEEEE");
+    print(data);
+    tcea = roundDouble(data['tceaLetra'], 5);
+    valorEntregar = roundDouble(data['valorEntregar'], 2);
+    valorRecibir = roundDouble(data['valorRecibir'], 2);
+    numDias = data['numDias'];  
   }
 
   @override
@@ -112,7 +124,7 @@ class _LetterDetailsState extends State<LetterDetails> {
             Divider(),
             Center(
                 child: Text(
-              "S/. $valorNominal",
+              "$tipoMoneda $valorNominal",
               style: TextStyle(fontSize: 25),
             )),
             Divider(),

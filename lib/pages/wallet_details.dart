@@ -18,6 +18,7 @@ class _WalletDetailsState extends State<WalletDetails> {
   var letterList;
   var wallet;
   var tceaCartera;
+  String tipoMoneda = '';
   List valoresRecibir = [];
   var valorTotalRecibir = 0.0;
   bool isLoaded = false;
@@ -28,6 +29,11 @@ class _WalletDetailsState extends State<WalletDetails> {
     setState(() {
       letterList = letterList;
     });
+    if (wallet[0]['tipoMoneda'] == 0) {
+      tipoMoneda = "S/.";
+    } else {
+      tipoMoneda = "\$";
+    }
     isLoaded = true;
   }
 
@@ -38,6 +44,7 @@ class _WalletDetailsState extends State<WalletDetails> {
     var fechaVenc;
     var fechaDesc = DateTime.parse(wallet[0]['fechaDesc'].toString());
     var suma = 0.0;
+    var retenciones = 0.0;
     for (var letter in letterList) {
       fechaVenc = DateTime.parse(letter['fechaVenc'].toString());
       data = letterOperation(
@@ -46,12 +53,16 @@ class _WalletDetailsState extends State<WalletDetails> {
           wallet[0]['tasaEfec'] + .0,
           letter['valNom'] + .0,
           wallet[0]['gastosInic'] + .0,
-          wallet[0]['gastosFin'] + .0);
-      suma += data[1];
-      datosTCEA.add([-data[2], data[3]]);
+          wallet[0]['gastosFin'] + .0,letter['retencion'] + .0);
+      retenciones += letter['retencion'] + .0;
+      print("OEEEEEE");
+      print(data);
+      suma += data['valorRecibir'];
+      datosTCEA.add([-data['valorEntregar'], data['numDias']]);
     }
     print(datosTCEA);
-    result = tceaWallet(datosTCEA, suma);
+    print(retenciones);
+    result = tceaWallet(datosTCEA, suma, 0);
     return [roundDouble(suma, 2), roundDouble(result * 100, 5)];
   }
 
@@ -173,7 +184,7 @@ class _WalletDetailsState extends State<WalletDetails> {
                                 ),
                                 Divider(),
                                 Text(
-                                  "S/. $valorTotalRecibir",
+                                  "$tipoMoneda $valorTotalRecibir",
                                   style: TextStyle(fontSize: 30),
                                 ),
                                 Divider(),
@@ -186,8 +197,7 @@ class _WalletDetailsState extends State<WalletDetails> {
                                       ),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))),
-                                  child:
-                                      stylish("TCEA de la cartera", 20, 1),
+                                  child: stylish("TCEA de la cartera", 20, 1),
                                 ),
                                 Divider(),
                                 Text(
@@ -222,7 +232,7 @@ class _WalletDetailsState extends State<WalletDetails> {
         return ListTile(
           title: Text("Letra " + letterList[i]['id'].toString()),
           subtitle:
-              Text("Valor nominal: S/. " + letterList[i]['valNom'].toString()),
+              Text("Valor nominal: $tipoMoneda " + letterList[i]['valNom'].toString()),
           leading: CircleAvatar(
             backgroundImage: AssetImage('lib/images/letra.jpg'),
             backgroundColor: Colors.blue,

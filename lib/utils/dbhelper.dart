@@ -47,10 +47,11 @@ class DbHelper {
 
   Future testDB() async {
     db = await openDb();
-    // await db!.execute('INSERT INTO users VALUES (1, "admin", "secret", "email@gmail.com", "Juan Rosales")');
-    // await db!.execute('INSERT INTO wallets VALUES (1, 1, 14.8, "2021-05-04", 11.7, 17.0)');
-    // await db!.execute('INSERT INTO letters VALUES (1, 1, "2021-04-11", "2021-07-10", 8538.0, 0)');
-    // await db!.execute('INSERT INTO letters VALUES (2, 1, "2021-04-15", "2021-06-14", 9865.0, 0)');
+    await db!.execute('INSERT INTO users VALUES (1, "user", "secret", "email@gmail.com", "Juan Rosales")');
+    await db!.execute('INSERT INTO wallets VALUES (1, 1, 0, 14.8, "2021-05-04", 11.7, 17.0)');
+    await db!.execute('INSERT INTO wallets VALUES (2, 1, 1, 15.8, "2021-04-04", 15.0, 12.0)');
+    await db!.execute('INSERT INTO letters VALUES (1, 1, "2021-04-11", "2021-07-10", 8538.0, 0)');
+    await db!.execute('INSERT INTO letters VALUES (2, 1, "2021-04-15", "2021-06-14", 9865.0, 0)');
 
     List wallets = await db!.rawQuery('select * from wallets');
     List letters = await db!.rawQuery('select * from letters');
@@ -81,20 +82,20 @@ class DbHelper {
     return users;
   }
 
-  Future insertWallet(int userId, double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
+  Future insertWallet(int userId, int idMoneda, double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
     List wallets = await db!.rawQuery('select * from wallets');
     int lastId = 0;
     if (wallets.length > 0) {
       var lastWallet = wallets.last;
       lastId = lastWallet['id'];
     }
-    await db!.execute('INSERT INTO wallets VALUES (${lastId+1}, $userId, $tasa, "$fechaDesc", $gastosIni, $gastosFin)');
+    await db!.execute('INSERT INTO wallets VALUES (${lastId+1}, $userId, $idMoneda, $tasa, "$fechaDesc", $gastosIni, $gastosFin)');
     print("Agregada nueva cartera");
   }
   
-  Future updateWallet(int walletId, double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
+  Future updateWallet(int walletId, int idMoneda, double tasa, String fechaDesc, double gastosIni, double gastosFin) async {
     // List wallets = await db!.rawQuery('select * from wallets');
-    await db!.execute('UPDATE wallets SET tasaEfec=$tasa, fechaDesc="$fechaDesc", gastosInic=$gastosIni, gastosFin=$gastosFin WHERE id=$walletId');
+    await db!.execute('UPDATE wallets SET tipoMoneda=$idMoneda, tasaEfec=$tasa, fechaDesc="$fechaDesc", gastosInic=$gastosIni, gastosFin=$gastosFin WHERE id=$walletId');
   }
 
   Future deleteWallet(int walletId) async {

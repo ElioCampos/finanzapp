@@ -1,4 +1,4 @@
-import 'package:finanzapp/pages/options.dart';
+import 'package:finanzapp/pages/help_page.dart';
 import 'package:finanzapp/pages/wallet_details.dart';
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
@@ -20,8 +20,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => HomePage(userId: userId));
     case 'wallets':
       return MaterialPageRoute(builder: (context) => WalletPage(userId: userId));
-    case 'options':
-      return MaterialPageRoute(builder: (context) => OptionsPage(userId: userId));
+    case 'help':
+      return MaterialPageRoute(builder: (context) => HelpPage(userId: userId));
     case 'wallet_details':
       return MaterialPageRoute(builder: (context) => WalletDetails(walletId: id,));
     case 'letter_details':

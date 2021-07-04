@@ -38,11 +38,11 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Opciones'),
+            leading: Icon(Icons.help),
+            title: Text('Ayuda'),
             onTap: () => {
               Navigator.pop(context),
-              Navigator.pushNamed(context, 'options', arguments: userId)
+              Navigator.pushNamed(context, 'help', arguments: userId)
             },
           ),
           ListTile(
